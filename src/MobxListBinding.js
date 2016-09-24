@@ -25,7 +25,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
      * @alias sap.ui.model.json.JSONListBinding
      * @extends sap.ui.model.ClientListBinding
      */
-    var JSONListBinding = ClientListBinding.extend("sap.ui.model.mobx.MobxModel");
+    var MobxListBinding = ClientListBinding.extend("sap.ui.model.mobx.MobxModel");
 
     /**
      * Return contexts for the list or a specified subset of contexts
@@ -36,7 +36,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
      * @return {Array} the contexts array
      * @protected
      */
-    JSONListBinding.prototype.getContexts = function(iStartIndex, iLength) {
+    MobxListBinding.prototype.getContexts = function(iStartIndex, iLength) {
       this.iLastStartIndex = iStartIndex;
       this.iLastLength = iLength;
 
@@ -75,7 +75,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
       return aContexts;
     };
 
-    JSONListBinding.prototype.getCurrentContexts = function() {
+    MobxListBinding.prototype.getCurrentContexts = function() {
       if (this.bUseExtendedChangeDetection) {
         return this.aLastContexts || [];
       } else {
@@ -89,7 +89,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
      *
      * @private
      */
-    JSONListBinding.prototype.getContextData = function(oContext) {
+    MobxListBinding.prototype.getContextData = function(oContext) {
       if (this.fnGetEntryKey && !this.bDetectUpdates) {
         return this.fnGetEntryKey(oContext);
       } else {
@@ -100,7 +100,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
     /**
      * Get indices of the list
      */
-    JSONListBinding.prototype.updateIndices = function() {
+    MobxListBinding.prototype.updateIndices = function() {
       var i;
 
       this.aIndices = [];
@@ -120,15 +120,13 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
      * Update the list, indices array and apply sorting and filtering
      * @private
      */
-    JSONListBinding.prototype.update = function(){
+    MobxListBinding.prototype.update = function(){
       var oList = this.oModel._getObject(this.sPath, this.oContext);
       if (oList) {
         if (jQuery.isArray(oList)) {
           if (this.bUseExtendedChangeDetection) {
-            debugger;
             this.oList = jQuery.extend(true, [], oList);
           } else {
-            debugger;
             this.oList = oList.slice(0);
           }
         } else {
@@ -154,7 +152,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
      * @param {boolean} bForceupdate
      *
      */
-    JSONListBinding.prototype.checkUpdate = function(bForceupdate){
+    MobxListBinding.prototype.checkUpdate = function(bForceupdate){
 
       if (this.bSuspended && !this.bIgnoreSuspend && !bForceupdate) {
         return;
@@ -203,6 +201,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
     };
 
 
-    return JSONListBinding;
+    return MobxListBinding;
 
   });
