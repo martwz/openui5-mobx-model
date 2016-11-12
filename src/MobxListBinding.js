@@ -9,8 +9,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
   function(jQuery, ChangeReason, ClientListBinding) {
     "use strict";
 
-
-
     /**
      *
      * @class
@@ -199,7 +197,6 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
         }
       }
     };
-
 
     return MobxListBinding;
 

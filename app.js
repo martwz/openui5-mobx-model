@@ -8,9 +8,10 @@
     sap.ui.require(['sap/ui/model/mobx/MobXModel', 'sap/ui/model/json/JSONModel'], function (MobxModel, JSONmodel) {
 
       var observableModel = mobx.observable({
-        _listCount: 0,
-        get listCount(){return this._listCount;},
-        set listCount(count) {this._listCount = parseInt(count);},
+        text: 'hello',
+        // _listCount: 0,
+        // get listCount(){return this._listCount;},
+        // set listCount(count) {this._listCount = parseInt(count);},
         nested: {
           _text:"",
           set text(text){
@@ -31,7 +32,7 @@
         },
 
         get header() {
-          return this.nested.listCount + ' dude!' + 'im having ' + this.itemsDynamic.length + ' items.';
+          return this.text + ' dude!' + 'im having ' + this.itemsDynamic.length + ' items.';
         }
       });
 
@@ -55,8 +56,10 @@
 
       var mobxUi5Adapter = new MobxModel(observableModel);
 
+      var binding = mobxUi5Adapter.bindProperty('/text');
+
       var input = new sap.m.Input({
-        value: "{/listCount}",
+        value: "{/text}",
         valueLiveUpdate: true
       });
 
@@ -77,7 +80,11 @@
           // mobx.extendObservable(observableModel.nested, {
           //   textNew: 'asfdasd'
           // });
-        mobxUi5Adapter.setProperty('/nested/textNew', 'helloo');
+
+          observableModel.text = 'changed ';
+
+          console.log(binding.getValue());
+        // mobxUi5Adapter.setProperty('/nested/textNew', 'helloo');
         // observableModel.items.push({title: '3'});
         // data.header = 'stuff';
         // model.setProperty('/text', 'world');

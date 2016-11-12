@@ -1,0 +1,9 @@
+{
+  "generator-karma": {
+    "frameworks": "jasmine",
+    "browsers": "Chrome,PhantomJS",
+    "app-files": "src/**/*.js",
+    "bower-components-path": "bower_components",
+    "test-files": "test/**/*.js"
+  }
+}

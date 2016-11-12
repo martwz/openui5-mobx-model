@@ -44,6 +44,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
     var MobxModel = AbstractModel.extend("sap.ui.model.mobx.MobxModel", /** @lends sap.ui.model.json.MobxModel.prototype */ {
 
       constructor : function(observable) {
+
+        if (!mobx.isObservable(observable)) throw new TypeError('The given constructor argument is not a mobx observable.')
+
         AbstractModel.apply(this, arguments);
         if (observable && typeof observable === "object") {
           this.setData(observable);
@@ -85,8 +88,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
     MobxModel.prototype.bindList = function(sPath, oContext, aSorters, aFilters, mParameters) {
       var that = this;
       var oBinding = new MobxListBinding(this, sPath, oContext, aSorters, aFilters, mParameters);
+
       mobx.reaction(
-        function () {return that.getProperty(sPath, oContext);},
+        function () {return mobx.toJS(that.getProperty(sPath, oContext))},
         function () {oBinding.checkUpdate();}
       );
       return oBinding;
