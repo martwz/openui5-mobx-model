@@ -7,17 +7,18 @@
     "test": "karma start scripts/karma.conf.js",
     "ui5": "mvn-install"
   },
-  "author": "Christian Theilemann <christian.",
+  "author": "Christian Theilemann",
   "dependencies": {
     "mobx": "^2.5.1"
   },
   "maven": {
     "repositoryURL": "http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.releases/",
     "dependencies": {
-      "com.sap.ui5:sapui5:1.42.0:zip:static": "/maven_packages/sapui5"
+      "com.sap.ui5:sapui5:1.44.4:zip:static": "/maven_packages/sapui5"
     }
   },
   "devDependencies": {
+    "electron": "=1.4.13",
     "electron-prebuilt": "^1.4.1",
     "jasmine-core": "^2.5.2",
     "karma": "^1.3.0",

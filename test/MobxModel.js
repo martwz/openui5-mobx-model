@@ -88,7 +88,7 @@ sap.ui.define(['sap/ui/model/mobx/MobxModel'], function (MobxAdapter) {
         expect(listBindingChanged).toBe(true);
 
         expect(observable.arrayOfPrimitives.slice()).toEqual([
-          0,1,2,3
+          0,'changed',2
         ]);
       })
 
