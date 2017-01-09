@@ -13,8 +13,8 @@
  */
 
 // Provides the JSON object based model implementation
-sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context', 'sap/ui/model/mobx/MobXListBinding', 'sap/ui/model/json/JSONPropertyBinding', 'sap/ui/model/json/JSONTreeBinding'],
-  function(jQuery, AbstractModel, Context, MobxListBinding, JSONPropertyBinding, JSONTreeBinding) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', 'sap/ui/model/Context', 'sap/ui/model/mobx/MobXListBinding', 'sap/ui/model/json/JSONPropertyBinding', 'sap/ui/model/json/JSONTreeBinding'],
+  function (jQuery, AbstractModel, Context, MobxListBinding, JSONPropertyBinding, JSONTreeBinding) {
     "use strict";
 
     // for now the standard JSONPropertyBinding works well together with Mobx. Can change in future though, hence aliasing it.
@@ -43,7 +43,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
      */
     var MobxModel = AbstractModel.extend("sap.ui.model.mobx.MobxModel", /** @lends sap.ui.model.json.MobxModel.prototype */ {
 
-      constructor : function(observable) {
+      constructor: function (observable) {
 
         if (!mobx.isObservable(observable)) throw new TypeError('The given constructor argument is not a mobx observable.')
 
@@ -62,7 +62,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
      *
      * @public
      */
-    MobxModel.prototype.setData = function(oData, bMerge){
+    MobxModel.prototype.setData = function (oData, bMerge) {
       if (bMerge) {
         // do a deep copy
         throw new Error('merge not yet implemented');
@@ -71,9 +71,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
       }
     };
 
-    MobxModel.prototype.bindProperty = function(sPath, oContext, mParameters) {
+    MobxModel.prototype.bindProperty = function (sPath, oContext, mParameters) {
       var that = this;
       var oBinding = new MobxPropertyBinding(this, sPath, oContext, mParameters);
+
       mobx.reaction(
         function () {return that.getProperty(sPath, oContext);},
         function () {oBinding.checkUpdate();}
@@ -85,14 +86,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
      * @see sap.ui.model.Model.prototype.bindList
      *
      */
-    MobxModel.prototype.bindList = function(sPath, oContext, aSorters, aFilters, mParameters) {
-      var that = this;
+    MobxModel.prototype.bindList = function (sPath, oContext, aSorters, aFilters, mParameters) {
       var oBinding = new MobxListBinding(this, sPath, oContext, aSorters, aFilters, mParameters);
-
-      mobx.reaction(
-        function () {return mobx.toJS(that.getProperty(sPath, oContext))},
-        function () {oBinding.checkUpdate();}
-      );
       return oBinding;
     };
 
@@ -107,7 +102,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
      * @return {boolean} true if the value was set correctly and false if errors occurred like the entry was not found.
      * @public
      */
-    MobxModel.prototype.setProperty = function(sPath, oValue, oContext, bAsyncUpdate) {
+    MobxModel.prototype.setProperty = function (sPath, oValue, oContext, bAsyncUpdate) {
       // debugger;
       var sResolvedPath = this.resolve(sPath, oContext),
         iLastSlash, sObjectPath, sProperty;
@@ -130,13 +125,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
 
       var oObject = this._getObject(sObjectPath);
       if (oObject) {
-        if (!oObject.hasOwnProperty(sProperty) || !mobx.isObservable(oObject, sProperty)) {
-          var observableExtension = {};
-          observableExtension[sProperty] = oValue;
-          mobx.extendObservable(oObject, observableExtension);
-        } else {
-          oObject[sProperty] = oValue;
-        }
+        // if (!oObject.hasOwnProperty(sProperty) || !mobx.isObservable(oObject, sProperty)) {
+        //   var observableExtension = {};
+        //   debugger;
+        //   observableExtension[sProperty] = oValue;
+        //   mobx.extendObservable(oObject, observableExtension);
+        // } else {
+        oObject[sProperty] = oValue;
+        // }
         this.checkUpdate(false, bAsyncUpdate);
         return true;
       }
@@ -152,7 +148,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
      * @return the value of the property
      * @public
      */
-    MobxModel.prototype.getProperty = function(sPath, oContext) {
+    MobxModel.prototype.getProperty = function (sPath, oContext) {
       return this._getObject(sPath, oContext);
     };
 

@@ -23,7 +23,21 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/C
      * @alias sap.ui.model.json.JSONListBinding
      * @extends sap.ui.model.ClientListBinding
      */
-    var MobxListBinding = ClientListBinding.extend("sap.ui.model.mobx.MobxModel");
+    var MobxListBinding = ClientListBinding.extend("sap.ui.model.mobx.MobxModel", {
+      constructor: function(model, sPath, oContext, aSorters, aFilters, mParameters){
+        var that = this;
+        this._disposeMobxReaction = mobx.reaction(
+          function () {return mobx.toJS(model.getProperty(sPath, oContext))},
+          function () {that.checkUpdate();}
+        );
+
+        ClientListBinding.apply(this, arguments);
+      },
+      destroy: function(){
+        this._disposeMobxReaction();
+        return ClientListBinding.prototype.destroy(this, arguments);
+      }
+    });
 
     /**
      * Return contexts for the list or a specified subset of contexts
