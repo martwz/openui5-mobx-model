@@ -1,6 +1,6 @@
-sap.ui.define(['sap/ui/model/mobx/MobxModel'], function (MobxAdapter) {
+sap.ui.define(['sap/ui/mobx/MobxModel'], function (MobxAdapter) {
 
-  describe('A suite', function () {
+  describe('Test MobxModel', function () {
 
     var observable;
     var adapter;
@@ -20,7 +20,7 @@ sap.ui.define(['sap/ui/model/mobx/MobxModel'], function (MobxAdapter) {
     describe('test the basics', function () {
 
       it('throws a TypeError if the constructor gets passed a non-observable', function () {
-        expect(function () {new MobxAdapter({})}).toThrowError(TypeError);
+        should.Throw(function () {new MobxAdapter({})}, TypeError);
       });
 
     });
@@ -36,8 +36,8 @@ sap.ui.define(['sap/ui/model/mobx/MobxModel'], function (MobxAdapter) {
         });
         observable.text = 'changed';
 
-        expect(textPropertyBinding.getValue()).toBe('changed');
-        expect(textChanged).toBe(true);
+        textPropertyBinding.getValue().should.equal('changed');
+        textChanged.should.be.true;
 
       });
 
@@ -50,7 +50,7 @@ sap.ui.define(['sap/ui/model/mobx/MobxModel'], function (MobxAdapter) {
           return observable.text;
         }).get();
 
-        expect(newValue).toBe('world');
+        newValue.should.equal('world');
       });
     });
 
@@ -58,7 +58,7 @@ sap.ui.define(['sap/ui/model/mobx/MobxModel'], function (MobxAdapter) {
       it('adding an item to an array of primitives via the observable progragates to the adapter', function(){
         var listBinding = adapter.bindList('/arrayOfPrimitives');
 
-        var listBindingChanged;
+        var listBindingChanged = false;
 
         listBinding.attachChange(function(){
           listBindingChanged = true;
@@ -66,10 +66,10 @@ sap.ui.define(['sap/ui/model/mobx/MobxModel'], function (MobxAdapter) {
 
         observable.arrayOfPrimitives.push(3);
 
-        expect(listBindingChanged).toBe(true);
-        expect(listBinding.getLength()).toEqual(4);
+        listBindingChanged.should.be.true;
+        listBinding.getLength().should.equal(4);
 
-        expect(observable.arrayOfPrimitives.slice()).toEqual([
+        observable.arrayOfPrimitives.slice().should.deep.equal([
           0,1,2,3
         ]);
       });
@@ -85,9 +85,9 @@ sap.ui.define(['sap/ui/model/mobx/MobxModel'], function (MobxAdapter) {
 
         observable.arrayOfPrimitives[1] = 'changed';
 
-        expect(listBindingChanged).toBe(true);
+        listBindingChanged.should.be.true;
 
-        expect(observable.arrayOfPrimitives.slice()).toEqual([
+        observable.arrayOfPrimitives.slice().should.deep.equal([
           0,'changed',2
         ]);
       })
