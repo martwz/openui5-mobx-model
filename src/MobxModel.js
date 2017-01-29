@@ -57,16 +57,17 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
   };
 
   MobxModel.prototype._getNode = function (path, context) {
+
     var resolvedPath = this.resolve(path, context);
     if (isNil(resolvedPath)) return null;
 
     var parts = resolvedPath.substring(1).split('/');
 
-    var part;
     var currentNode = this._observable;
 
-    while ((part = parts.pop()) && !isNil(currentNode)) {
-      currentNode = currentNode[part];
+    var partsLength = parts.length;
+    for(var i = 0; i < partsLength && !isNil(currentNode); i++) {
+      currentNode = currentNode[parts[i]];
     }
 
     return currentNode;
