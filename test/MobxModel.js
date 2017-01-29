@@ -90,10 +90,8 @@ sap.ui.define(['sap/ui/mobx/MobxModel'], function (MobxAdapter) {
         observable.arrayOfPrimitives.slice().should.deep.equal([
           0,'changed',2
         ]);
-      })
-
-
-    })
+      });
+    });
 
   });
 
