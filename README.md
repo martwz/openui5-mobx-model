@@ -10,7 +10,8 @@ Practically it is an adapter which wraps an mobx observable so that it can be us
 
 In practice this serves as a way more powerful databinding in ui5.
 
+For an introduction and examples please read: https://blogs.sap.com/2017/01/30/advanced-state-management-in-sapui5-via-mobx/
+
 ### Status
 
-- This is highly experimental and work-in-progress. 
-- see in the tests what is working and what not (tests can be executed with wallaby.js)
+- add more documentation
