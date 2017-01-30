@@ -2,13 +2,21 @@ module.exports = function (config) {
   'use strict';
 
   const UI5_VERSION = '1.42.9';
+  const CI_MODE = !!config.singleRun;
 
   config.set({
-
     frameworks: [
       'openui5', 'mocha', 'chai', 'chai-as-promised'
     ],
-    // list of files / patterns to load in the browser
+    reporters: ["mocha"].concat(CI_MODE ? 'coverage' : []),
+    mochaReporter: {
+      showDiff: true
+    },
+    coverageReporter: {
+      reporters: [{type: 'lcov'}],
+      subdir: browser => browser.split(' ')[0]
+    },
+    preprocessors: CI_MODE ? {"src/**/*.js": ["coverage"]} : {},
     files: [
       'node_modules/mobx/lib/mobx.umd.js',
       {pattern: 'src/**/*.js', included: false, served: true, watched: true},
@@ -41,7 +49,7 @@ module.exports = function (config) {
     customLaunchers: {
       Chrome_without_security: {
         base: 'Chrome',
-        flags: ['--disable-web-security']
+        flags: ['--disable-web-security'].concat(require('is-ci') ? '--no-sandbox' : [])
       }
     }
   });

@@ -1,3 +1,4 @@
 **/node_modules
 .idea
 **/maven_packages
+/coverage/

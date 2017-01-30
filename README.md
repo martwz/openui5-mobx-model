@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/geekflyer/mobx-ui5.svg?branch=master)](https://travis-ci.org/geekflyer/mobx-ui5) [![codecov](https://codecov.io/gh/geekflyer/mobx-ui5/branch/master/graph/badge.svg)](https://codecov.io/gh/geekflyer/mobx-ui5)
+
+
 mobx-ui5
 ========
 
