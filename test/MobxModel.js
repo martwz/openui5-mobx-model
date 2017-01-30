@@ -1,4 +1,4 @@
-sap.ui.define(['sap/ui/mobx/MobxModel'], function (MobxAdapter) {
+sap.ui.define(['sap/ui/mobx/MobxModel'], function (MobxModel) {
 
   describe('Test MobxModel', function () {
 
@@ -14,13 +14,13 @@ sap.ui.define(['sap/ui/mobx/MobxModel'], function (MobxAdapter) {
           2
         ]
       });
-      adapter = new MobxAdapter(observable);
+      adapter = new MobxModel(observable);
     });
 
     describe('test the basics', function () {
 
       it('throws a TypeError if the constructor gets passed a non-observable', function () {
-        should.Throw(function () {new MobxAdapter({})}, TypeError);
+        should.Throw(function () {new MobxModel({})}, TypeError);
       });
 
     });

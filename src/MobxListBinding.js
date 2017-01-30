@@ -1,12 +1,12 @@
-sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/ListBinding', './constants'],
-  function (jQuery, ChangeReason, ListBinding, constants) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/ListBinding', './namespace'],
+  function (jQuery, ChangeReason, ListBinding, namespace) {
     'use strict';
 
     function isNil(value) {
       return value == null;
     }
 
-    var MobxListBinding = ListBinding.extend(constants.NAMESPACE + '.MobxListBinding', {
+    var MobxListBinding = ListBinding.extend(namespace + '.MobxListBinding', {
       constructor: function (model, path, context, sorters, filters, params) {
 
         this._model = model;
@@ -29,7 +29,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/L
         return ListBinding.prototype.destroy(this, arguments);
       },
 
-      _getObservableArray: function(){
+      _getObservableArray: function () {
         return this._model.getProperty(this._path, this._context) || [];
       },
 
@@ -54,7 +54,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/L
         if (!(effectiveArrPath.endsWith('/'))) effectiveArrPath = effectiveArrPath + '/';
 
         var contexts = [];
-        for (var i = startIndex; i < exclusiveEndIndex; i++){
+        for (var i = startIndex; i < exclusiveEndIndex; i++) {
           contexts.push(this._model.getContext(effectiveArrPath + i));
         }
         return contexts;

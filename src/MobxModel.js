@@ -1,78 +1,78 @@
-sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context', './MobxListBinding', './MobxPropertyBinding', './constants'],
-  function (jQuery, AbstractModel, Context, MobxListBinding, MobxPropertyBinding, constants) {
-  'use strict';
+sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context', './MobxListBinding', './MobxPropertyBinding', './namespace'],
+  function (jQuery, AbstractModel, Context, MobxListBinding, MobxPropertyBinding, namespace) {
+    'use strict';
 
-  function isNil(value) {
-    return value == null;
-  }
-
-  var MobxModel = AbstractModel.extend(constants.NAMESPACE + '.MobxModel', {
-
-    _observable: null,
-    constructor: function (observable) {
-
-      if (!mobx.isObservable(observable)) throw new TypeError('The given constructor argument is not a mobx observable.');
-
-      this._observable = observable;
-
-      AbstractModel.apply(this, arguments);
+    function isNil(value) {
+      return value == null;
     }
-  });
 
-  MobxModel.prototype.bindProperty = function (sPath, oContext, mParameters) {
-    return new MobxPropertyBinding(this, sPath, oContext, mParameters);
-  };
+    var MobxModel = AbstractModel.extend(namespace + '.MobxModel', {
 
-  MobxModel.prototype.bindList = function (sPath, oContext, aSorters, aFilters, mParameters) {
-    return new MobxListBinding(this, sPath, oContext, aSorters, aFilters, mParameters);
-  };
+      _observable: null,
+      constructor: function (observable) {
 
-  MobxModel.prototype.setProperty = function (path, value, context, bAsyncUpdate) {
-    var resolvedPath = this.resolve(path, context);
+        if (!mobx.isObservable(observable)) throw new TypeError('The given constructor argument is not a mobx observable.');
 
-    // return if path / context is invalid
-    if (!resolvedPath) {
+        this._observable = observable;
+
+        AbstractModel.apply(this, arguments);
+      }
+    });
+
+    MobxModel.prototype.bindProperty = function (sPath, oContext, mParameters) {
+      return new MobxPropertyBinding(this, sPath, oContext, mParameters);
+    };
+
+    MobxModel.prototype.bindList = function (sPath, oContext, aSorters, aFilters, mParameters) {
+      return new MobxListBinding(this, sPath, oContext, aSorters, aFilters, mParameters);
+    };
+
+    MobxModel.prototype.setProperty = function (path, value, context, bAsyncUpdate) {
+      var resolvedPath = this.resolve(path, context);
+
+      // return if path / context is invalid
+      if (!resolvedPath) {
+        return false;
+      }
+      // If data is set on root, call setData instead
+      if (resolvedPath === '/') {
+        throw new Error('invariant: setting a new root object (observable) "/" after constructing the model is not yet supported in MobxModel');
+        // this.setData(value);
+        // return true;
+      }
+
+      var iLastSlash = resolvedPath.lastIndexOf('/');
+      var property = resolvedPath.substring(iLastSlash + 1);
+
+      var node = iLastSlash === 0 ? this._observable : this._getNode(resolvedPath.substring(0, iLastSlash));
+      if (node) {
+        node[property] = value;
+        return true;
+      }
       return false;
-    }
-    // If data is set on root, call setData instead
-    if (resolvedPath === '/') {
-      throw new Error('invariant: setting a new root object (observable) "/" after constructing the model is not yet supported in MobxModel');
-      // this.setData(value);
-      // return true;
-    }
+    };
 
-    var iLastSlash = resolvedPath.lastIndexOf('/');
-    var property = resolvedPath.substring(iLastSlash + 1);
+    MobxModel.prototype.getProperty = function (sPath, oContext) {
+      return this._getNode(sPath, oContext);
+    };
 
-    var node = iLastSlash === 0 ? this._observable : this._getNode(resolvedPath.substring(0, iLastSlash));
-    if (node) {
-      node[property] = value;
-      return true;
-    }
-    return false;
-  };
+    MobxModel.prototype._getNode = function (path, context) {
 
-  MobxModel.prototype.getProperty = function (sPath, oContext) {
-    return this._getNode(sPath, oContext);
-  };
+      var resolvedPath = this.resolve(path, context);
+      if (isNil(resolvedPath)) return null;
 
-  MobxModel.prototype._getNode = function (path, context) {
+      var parts = resolvedPath.substring(1).split('/');
 
-    var resolvedPath = this.resolve(path, context);
-    if (isNil(resolvedPath)) return null;
+      var currentNode = this._observable;
 
-    var parts = resolvedPath.substring(1).split('/');
+      var partsLength = parts.length;
+      for (var i = 0; i < partsLength && !isNil(currentNode); i++) {
+        currentNode = currentNode[parts[i]];
+      }
 
-    var currentNode = this._observable;
+      return currentNode;
+    };
 
-    var partsLength = parts.length;
-    for(var i = 0; i < partsLength && !isNil(currentNode); i++) {
-      currentNode = currentNode[parts[i]];
-    }
+    return MobxModel;
 
-    return currentNode;
-  };
-
-  return MobxModel;
-
-});
+  });

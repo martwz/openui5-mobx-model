@@ -1,8 +1,8 @@
-sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/PropertyBinding', './constants'],
-  function (jQuery, ChangeReason, PropertyBinding, constants) {
+sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/PropertyBinding', './namespace'],
+  function (jQuery, ChangeReason, PropertyBinding, namespace) {
     'use strict';
 
-    var MobxPropertyBinding = PropertyBinding.extend(constants.NAMESPACE + '.MobxPropertyBinding', {
+    var MobxPropertyBinding = PropertyBinding.extend(namespace + '.MobxPropertyBinding', {
       constructor: function (mobxModel, path, context, params) {
         PropertyBinding.apply(this, arguments);
 
