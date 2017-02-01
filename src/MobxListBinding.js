@@ -19,7 +19,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/L
         ListBinding.apply(this, arguments);
 
         this._mobxDisposer = mobx.reaction(
-          function () {return model.getProperty(path, context).slice();},
+          function () {
+            var observableArr = model.getProperty(path, context);
+            if (observableArr && typeof observableArr.slice === 'function')
+              return observableArr.slice();
+          },
           this._fireChange.bind(this, {reason: ChangeReason.Change})
         );
       },
