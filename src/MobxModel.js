@@ -8,15 +8,23 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
 
     var MobxModel = AbstractModel.extend(namespace + '.MobxModel', {
 
-      _observable: null,
       constructor: function (observable) {
 
-        if (!mobx.isObservable(observable)) throw new TypeError('The given constructor argument is not a mobx observable.');
-
-        this._observable = observable;
+        mobx.extendObservable(this, {
+            _observable: observable || {}
+        });
 
         AbstractModel.apply(this, arguments);
       },
+      getObservable: function () {
+        return this._observable;
+      },
+      setObservable: function (observable) {
+        this._observable = observable;
+      },
+      // ALIAS
+      getData: this.getObservable,
+      setData: this.setObservable,
       bindProperty: function (sPath, oContext, mParameters) {
         return new MobxPropertyBinding(this, sPath, oContext, mParameters);
       },
