@@ -19,20 +19,17 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/P
       destroy: function () {
         this._mobxDisposer();
         PropertyBinding.prototype.destroy.apply(this, arguments);
+      },
+      getValue: function () {
+        return this._model.getProperty(this._path, this._context);
+      },
+      setValue: function (value) {
+        if (this.bSuspended) {
+          return;
+        }
+        this._model.setProperty(this._path, value, this._context/*, true*/)
       }
     });
-
-    MobxPropertyBinding.prototype.getValue = function () {
-      return this._model.getProperty(this._path, this._context);
-    };
-
-    MobxPropertyBinding.prototype.setValue = function (value) {
-      if (this.bSuspended) {
-        return;
-      }
-
-      this._model.setProperty(this._path, value, this._context/*, true*/)
-    };
 
     return MobxPropertyBinding;
 
