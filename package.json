@@ -1,5 +1,5 @@
 {
-  "name": "mobx-ui5",
+  "name": "openui5-mobx-model",
   "version": "1.0.0-alpha.1",
   "description": "ui5 bindings for mobx",
   "main": "src/MobxModel.js",
