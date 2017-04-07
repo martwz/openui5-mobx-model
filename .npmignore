@@ -1,0 +1,5 @@
+/test
+karma.conf.js
+/.idea
+/coverage
+.travis.yml
