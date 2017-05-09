@@ -23,8 +23,8 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
         this._observable = observable;
       },
       // ALIAS
-      getData: this.getObservable,
-      setData: this.setObservable,
+      getData: function () { return this.getObservable(); },
+      setData: function (observable) { this.setObservable(observable); },
       bindProperty: function (sPath, oContext, mParameters) {
         return new MobxPropertyBinding(this, sPath, oContext, mParameters);
       },
