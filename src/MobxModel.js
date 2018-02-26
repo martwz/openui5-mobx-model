@@ -58,6 +58,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
       getProperty: function (sPath, oContext) {
         return this._getNode(sPath, oContext);
       },
+      updateBindings: function(bForceUpdate) {
+      	jQuery.sap.log.info("MobxModel.updateBindings(" + bForceUpdate + ") was called");
+      	if(bForceUpdate) {
+      		this.checkUpdate(bForceUpdate);
+      	}
+      },
       _getNode: function (path, context) {
 
         var resolvedPath = this.resolve(path, context);
