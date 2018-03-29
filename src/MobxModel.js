@@ -50,15 +50,17 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
 
         var node = iLastSlash === 0 ? this._observable : this._getNode(resolvedPath.substring(0, iLastSlash));
         if (node) {
-          // MobX will not react to observable properties that did not exist when tracking started.
-          // If any other observable causes the autorun to re-run, the autorun will start tracking the postDate as well.
-          if (!(property in node) && mobx.isObservableObject(node)) {
-          	var oExt = {};
-          	oExt[property] = value;
-          	mobx.extendObservable(node, oExt);
-          } else {
-            node[property] = value;
-          }
+          mobx.set(node, property, value);
+    	  // Pre-4.0.0, TODO: removeme
+          //// MobX will not react to observable properties that did not exist when tracking started.
+          //// If any other observable causes the autorun to re-run, the autorun will start tracking the postDate as well.
+          //if (!(property in node) && mobx.isObservableObject(node)) {
+          //	var oExt = {};
+          //	oExt[property] = value;
+          //	mobx.extendObservable(node, oExt);
+          //} else {
+          //  node[property] = value;
+          //}
           return true;
         }
         return false;
@@ -87,7 +89,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
 		  // Check for out of bounds array index access to suppress warnings
 		  //	"[mobx.array] Attempt to read an array index (1) that is out of bounds (1). Please check length first. Out of bound indices will not be tracked by MobX"
           if (!mobx.isObservableArray(currentNode) || parts[i] < currentNode.length) {
-        	currentNode = currentNode[parts[i]];
+          	// Pre-4.0.0, TODO: removeme
+        	// currentNode = currentNode[parts[i]];
+        	currentNode = mobx.get(currentNode, parts[i]);
           } else {
           	currentNode = null;
           }
