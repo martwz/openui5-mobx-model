@@ -51,10 +51,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
         var node = iLastSlash === 0 ? this._observable : this._getNode(resolvedPath.substring(0, iLastSlash));
         if (node) {
           if (mobx.isObservable(node) ) {
+          	
             // MobX will not react to observable properties that did not exist when tracking started, unless set with mobx.set() accessed with mobx.get().
             // If any other observable causes an autorun to re-run, the autorun will start tracking the new property as well.
             mobx.set(node, property, value);	// Unified observable setter interface in MobX >= 4
           } else {
+          	
           	// This branch should never be hit
           	node[property] = value;
           }
@@ -82,10 +84,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
 
         for (var i = 0; i < partsLength && !isNil(currentNode); i++) {
 
-		  // Check for out of bounds array index access to suppress warnings
-		  //	"[mobx.array] Attempt to read an array index (1) that is out of bounds (1). Please check length first. Out of bound indices will not be tracked by MobX"
 		  if (mobx.isObservable(currentNode) ) {
             if (mobx.isComputedProp(currentNode, parts[i])) {
+            	
               currentNode = currentNode[parts[i]];
             } else {
               currentNode = mobx.get(currentNode, parts[i]); // Strangely, mobx.get() does not see computed properties (.has() also doesn't)
@@ -97,7 +98,5 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
         return currentNode;
       }
     });
-
     return MobxModel;
-
   });
