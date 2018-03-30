@@ -24,7 +24,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/L
             if (observableArr && typeof observableArr.slice === 'function')
               return observableArr.slice();
           },
-          this._fireChange.bind(this, {reason: ChangeReason.Change})
+          this._fireChange.bind(this, {reason: ChangeReason.Change}),
+          {
+          	// delay: 50 // debounce change events
+          }
         );
       },
 

@@ -13,7 +13,10 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ChangeReason', 'sap/ui/model/P
 
         this._mobxDisposer = mobx.reaction(
           this._model.getProperty.bind(this._model, path, context),
-          this._fireChange.bind(this, {reason: ChangeReason.Change})
+          this._fireChange.bind(this, {reason: ChangeReason.Change}),
+          {
+          	// delay: 50 // debounce change events
+          }
         );
       },
       destroy: function () {
