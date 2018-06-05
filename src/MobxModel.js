@@ -15,6 +15,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
         });
 
         AbstractModel.apply(this, arguments);
+        // Parent class sap.ui.model.Model has a default size limitation of 100 entries
+        // which may and does cause problems. 
+        this.setSizeLimit(Number.MAX_SAFE_INTEGER);
       },
       getObservable: function () {
         return this._observable;

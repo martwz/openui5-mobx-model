@@ -1,6 +1,6 @@
 {
   "name": "openui5-mobx-model",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "ui5 bindings for mobx",
   "main": "src/MobxModel.js",
   "types": "types.d.ts",
