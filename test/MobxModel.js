@@ -97,7 +97,7 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
       });
 
       it('out of bounds array index access does not generate MobX warning', function () {
-        model.getProperty('/nested/array/2').should.equal(null);
+        model.getProperty('/nested/array/2').should.be.a('null');
       });
     });
 
