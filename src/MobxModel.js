@@ -53,7 +53,16 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
 
         var node = iLastSlash === 0 ? this._observable : this._getNode(resolvedPath.substring(0, iLastSlash));
         if (node) {
-          node[property] = value;
+          if (mobx.isObservable(node) ) {
+          	
+            // MobX will not react to observable properties that did not exist when tracking started, unless set with mobx.set() accessed with mobx.get().
+            // If any other observable causes an autorun to re-run, the autorun will start tracking the new property as well.
+            mobx.set(node, property, value);	// Unified observable setter interface in MobX >= 4
+          } else {
+          	
+          	// This branch should never be hit
+          	node[property] = value;
+          }
           return true;
         }
         return false;
@@ -61,24 +70,36 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
       getProperty: function (sPath, oContext) {
         return this._getNode(sPath, oContext);
       },
+      updateBindings: function(bForceUpdate) {
+      	jQuery.sap.log.info("MobxModel.updateBindings(" + bForceUpdate + ") was called");
+      	if(bForceUpdate) {
+      		this.checkUpdate(bForceUpdate);
+      	}
+      },
       _getNode: function (path, context) {
 
         var resolvedPath = this.resolve(path, context);
         if (isNil(resolvedPath)) return null;
 
         var parts = resolvedPath.substring(1).split('/');
-
+        var partsLength = parts.length;
         var currentNode = this._observable;
 
-        var partsLength = parts.length;
         for (var i = 0; i < partsLength && !isNil(currentNode); i++) {
-          currentNode = currentNode[parts[i]];
-        }
 
+		  if (mobx.isObservable(currentNode) ) {
+            if (mobx.isComputedProp(currentNode, parts[i])) {
+            	
+              currentNode = currentNode[parts[i]];
+            } else {
+              currentNode = mobx.get(currentNode, parts[i]); // Strangely, mobx.get() does not see computed properties (.has() also doesn't)
+            }
+          } else {
+          	currentNode = currentNode[parts[i]];
+          }
+        }
         return currentNode;
       }
     });
-
     return MobxModel;
-
   });
