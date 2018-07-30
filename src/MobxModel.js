@@ -72,7 +72,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
 
         var partsLength = parts.length;
         for (var i = 0; i < partsLength && !isNil(currentNode); i++) {
-          currentNode = currentNode[parts[i]];
+
+		  // Check for out of bounds array index access to suppress warnings
+		  //	"[mobx.array] Attempt to read an array index (1) that is out of bounds (1). Please check length first. Out of bound indices will not be tracked by MobX"
+          if(!mobx.isObservableArray(currentNode) || parts[i] < currentNode.length ) {
+        	currentNode = currentNode[parts[i]];
+          } else {
+          	currentNode = null;
+          }
         }
 
         return currentNode;

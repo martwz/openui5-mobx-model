@@ -96,6 +96,9 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
         model.getProperty('name', context).should.equal('bar');
       });
 
+      it('out of bounds array index access does not generate MobX warning', function () {
+        should.not.exist(model.getProperty('/nested/array/2'));
+      });
     });
 
   });
