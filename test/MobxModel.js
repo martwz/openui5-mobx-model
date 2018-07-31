@@ -33,9 +33,6 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
           1,
           2
         ],
-        get arrayOfPrimitivesLength() {
-        	return this.arrayOfPrimitives.length;
-        },
         nested: {
           array: [{name: 'foo'}, {name: 'bar'}]
         }
@@ -118,16 +115,7 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
         var context = new Context(model, '/nested/array/1');
         model.getProperty('name', context).should.equal('bar');
       });
-      
-      it('updateBindings() method exists', function () {
-      	model.updateBindings(true);
-        should.exist(model.updateBindings);
-      });
 
-      it('getting computed property nestedLength', function () {
-        var computedPropertyBinding = model.bindProperty('/arrayOfPrimitivesLength');
-        computedPropertyBinding.getValue().should.equal(3);
-      });
     });
 
   });
