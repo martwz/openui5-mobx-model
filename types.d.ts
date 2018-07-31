@@ -1,6 +1,6 @@
 declare namespace sap.ui.mobx {
   export class MobxModel {
-    constructor(initialDataOrObservable: object);
+    constructor(initialDataOrObservable: object, mParameters?: object);
 
     getObservable(): object;
 
