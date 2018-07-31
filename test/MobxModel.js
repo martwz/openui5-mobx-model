@@ -4,6 +4,26 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
 
     var observable;
     var model;
+    
+    describe('test instance constructor', function () {
+    	
+      var nSizeLimit = 3;
+
+      beforeEach(function () {
+        observable = mobx.observable({
+          array: [{val: 0}, {val: 1}, {val: 2}, {val: 3}, {val: 4}]
+        });
+        model = new MobxModel(observable, {sizeLimit: nSizeLimit});
+      });
+
+      it('model iSizeLimit is set to ' + nSizeLimit, function () {
+        model.iSizeLimit.should.equal(nSizeLimit);
+      });
+
+      it('getContexts() returns ' + nSizeLimit + ' contexts out of 5', function () {
+        model.bindList('/array').getContexts().length.should.equal(nSizeLimit);
+      });
+    });
 
     beforeEach(function () {
       observable = mobx.observable({
@@ -13,6 +33,9 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
           1,
           2
         ],
+        get arrayOfPrimitivesLength() {
+        	return this.arrayOfPrimitives.length;
+        },
         nested: {
           array: [{name: 'foo'}, {name: 'bar'}]
         }
@@ -95,7 +118,16 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
         var context = new Context(model, '/nested/array/1');
         model.getProperty('name', context).should.equal('bar');
       });
+      
+      it('updateBindings() method exists', function () {
+      	model.updateBindings(true);
+        should.exist(model.updateBindings);
+      });
 
+      it('getting computed property nestedLength', function () {
+        var computedPropertyBinding = model.bindProperty('/arrayOfPrimitivesLength');
+        computedPropertyBinding.getValue().should.equal(3);
+      });
     });
 
   });
