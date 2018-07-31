@@ -5,25 +5,23 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
     var observable;
     var model;
     
-    beforeEach(function () {
-      observable = mobx.observable({
-        text: 'hello',
-        arrayOfPrimitives: [
-          0,
-          1,
-          2
-        ],
-        nested: {
-          array: [{name: 'foo'}, {name: 'bar'}]
-        }
-      });
-      model = new MobxModel(observable, {sizeLimit: 0});
-    });
-
     describe('test instance constructor', function () {
-      it('model iSizeLimit is set to Number.MAX_SAFE_INTEGER', function () {
+    	
+      var nSizeLimit = 3;
 
-        model.iSizeLimit.should.equal(Number.MAX_SAFE_INTEGER);
+      beforeEach(function () {
+        observable = mobx.observable({
+          array: [{val: 0}, {val: 1}, {val: 2}, {val: 3}, {val: 4}]
+        });
+        model = new MobxModel(observable, {sizeLimit: nSizeLimit});
+      });
+
+      it('model iSizeLimit is set to ' + nSizeLimit, function () {
+        model.iSizeLimit.should.equal(nSizeLimit);
+      });
+
+      it('getContexts() returns ' + nSizeLimit + ' contexts out of 5', function () {
+        model.bindList('/array').getContexts().length.should.equal(nSizeLimit);
       });
     });
 
