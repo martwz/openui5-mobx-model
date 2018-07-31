@@ -4,6 +4,28 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
 
     var observable;
     var model;
+    
+    beforeEach(function () {
+      observable = mobx.observable({
+        text: 'hello',
+        arrayOfPrimitives: [
+          0,
+          1,
+          2
+        ],
+        nested: {
+          array: [{name: 'foo'}, {name: 'bar'}]
+        }
+      });
+      model = new MobxModel(observable, {sizeLimit: 0});
+    });
+
+    describe('test instance constructor', function () {
+      it('model iSizeLimit is set to Number.MAX_SAFE_INTEGER', function () {
+
+        model.iSizeLimit.should.equal(Number.MAX_SAFE_INTEGER);
+      });
+    });
 
     beforeEach(function () {
       observable = mobx.observable({
