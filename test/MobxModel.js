@@ -4,6 +4,26 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
 
     var observable;
     var model;
+    
+    describe('test instance constructor', function () {
+    	
+      var nSizeLimit = 3;
+
+      beforeEach(function () {
+        observable = mobx.observable({
+          array: [{val: 0}, {val: 1}, {val: 2}, {val: 3}, {val: 4}]
+        });
+        model = new MobxModel(observable, {sizeLimit: nSizeLimit});
+      });
+
+      it('model iSizeLimit is set to ' + nSizeLimit, function () {
+        model.iSizeLimit.should.equal(nSizeLimit);
+      });
+
+      it('getContexts() returns ' + nSizeLimit + ' contexts out of 5', function () {
+        model.bindList('/array').getContexts().length.should.equal(nSizeLimit);
+      });
+    });
 
     beforeEach(function () {
       observable = mobx.observable({
