@@ -15,3 +15,8 @@ For an introduction and examples please read: https://blogs.sap.com/2017/01/30/a
 ### Status
 
 - add more documentation
+
+### Ownership
+
+- This small library was originally written by @geekflyer
+- As of 20th Sep 2018 repo ownership was transferred from @geekflyer to @martinxxD who becomes the new owner of the library
