@@ -171,7 +171,7 @@ sap.ui.define(['sap/ui/mobx/MobxModel', 'sap/ui/model/Context'], function (MobxM
         textPropertyBinding.attachChange(function () {
           textChanged = true;
         });
-        // Note: this won't work, as expected: observable.newText = 'initial';
+        // Note: observable.newText = 'initial' won't work, as expected.
         model.setProperty('/newText', 'initial');
 
         textPropertyBinding.getValue().should.equal('initial');
