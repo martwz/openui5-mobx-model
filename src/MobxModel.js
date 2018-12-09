@@ -1,3 +1,4 @@
+/* global mobx */
 sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context', './MobxListBinding', './MobxPropertyBinding', './namespace'],
   function (jQuery, AbstractModel, Context, MobxListBinding, MobxPropertyBinding, namespace) {
     'use strict';
@@ -99,7 +100,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
       _getNode: function (path, context) {
 
         var resolvedPath = this.resolve(path, context);
-        if (isNil(resolvedPath)) return null;
+        if (isNil(resolvedPath)) { return null; }
 
         var parts = resolvedPath.substring(1).split('/');
         var partsLength = parts.length;
@@ -111,8 +112,11 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
             currentNode = mobx.observable(currentNode);
           }
           if (!mobx.has(currentNode, parts[i])) {
-
-            currentNode = currentNode[parts[i]];
+			if(mobx.isObservableArray(currentNode) && parts[i] > currentNode.length - 1) { // Silence out of bounds MobX warning
+				currentNode = undefined;
+			} else {
+            	currentNode = currentNode[parts[i]]; // Idea: if currentNode is array, check if trying to access out of bound index.
+			}
           } else {
             currentNode = mobx.get(currentNode, parts[i]); // Strangely, mobx.get() does not see computed properties (.has() also doesn't)
           }
