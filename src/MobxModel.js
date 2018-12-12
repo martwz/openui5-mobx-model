@@ -115,7 +115,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
 			if(mobx.isObservableArray(currentNode) && parts[i] > currentNode.length - 1) { // Silence out of bounds MobX warning
 				currentNode = undefined;
 			} else {
-            	currentNode = currentNode[parts[i]]; // Idea: if currentNode is array, check if trying to access out of bound index.
+            	currentNode = currentNode[parts[i]];
 			}
           } else {
             currentNode = mobx.get(currentNode, parts[i]); // Strangely, mobx.get() does not see computed properties (.has() also doesn't)
