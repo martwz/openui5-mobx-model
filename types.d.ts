@@ -15,8 +15,8 @@ declare namespace sap.ui.mobx {
     bindList(sPath, oContext, aSorters, aFilters, mParameters);
 
     setProperty(path: string, value: any, context?: any);
-    setProperty(path: string, context?: any);
 
+    setProperty(path: string, context?: any);
   }
 }
 
