@@ -1,7 +1,7 @@
 module.exports = function (config) {
   'use strict';
 
-  const UI5_VERSION = '1.44.38';
+  const UI5_VERSION = '1.61.2';
   const CI_MODE = !!config.singleRun;
 
   config.set({
