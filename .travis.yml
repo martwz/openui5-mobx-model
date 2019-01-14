@@ -7,5 +7,3 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 script:
   - npm test
-after_success:
-  - npm run codecov

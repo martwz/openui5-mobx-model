@@ -6,38 +6,12 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/Model', 'sap/ui/model/Context'
       return value == null;
     }
 
-	/**
-	 * Constructor for a new MobxModel.
-	 * 
-	 * @param {object} MobX observable.
-	 * @param {object} [mParameters] Map which contains the following parameter properties:
-	 * @param {number} [mParameters.sizeLimit] Set the maximum number of entries which are used for list bindings. If unset, the default - <code>100</code> - of the base class is used. If <code>0</code> is given, <code>Number.MAX_SAFE_INTEGER</code> is set
-	 * 
-	 * @class
-	 * Model implementation for MobX reactive (observable) model
-	 * 
-	 * @extends sap.ui.model.Model
-	 * 
-	 * @constructor
-	 * @public
-	 */
     var MobxModel = AbstractModel.extend(namespace + '.MobxModel', {
 
-      constructor: function (observable, mParameters) {
-
-        mobx.extendObservable(this, {
-            _observable: observable || {}
-        });
-
+      constructor: function (observable) {
+        if (!mobx.isObservable(observable)) throw new TypeError('The given constructor argument is not a mobx observable.');
+        this._observable = observable;
         AbstractModel.apply(this, arguments);
-        
-        // Parameters
-        if(mParameters && typeof mParameters === "object") {
-	        // Parent class sap.ui.model.Model has a default size limitation of 100 entries
-        	if("sizeLimit" in mParameters) {
-        		this.setSizeLimit(mParameters.sizeLimit > 0 ? mParameters.sizeLimit : Number.MAX_SAFE_INTEGER);
-        	}
-        }
       },
       getObservable: function () {
         return this._observable;
